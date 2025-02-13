@@ -1,4 +1,4 @@
-% Test rotation matrices
+% Test cases
 R1 = [1 0 0; 0 cos(pi/3) -sin(pi/3); 0 sin(pi/3) cos(pi/3)];
 R2 = [cos(pi/3) 0 -sin(pi/3); 0 1 0; sin(pi/3) 0 cos(pi/3)];
 R3 = R1*R2*R1;
@@ -10,11 +10,11 @@ quats = {[1/sqrt(2) 1/sqrt(2) 0 0], [3/5 0 4/5 0]};
 
 %% Test: m_rotm2axang
 % Test singularity
-[ang, ax] = m_rotm2axang(eye(3));
+[ax, ang] = m_rotm2axang(eye(3));
 assert(ang == 0 &&  m_isequal(ax, [0; 0; 0]))
 
 for k=1:length(Rs)
-    [ang, ax] = m_rotm2axang(Rs{k});
+    [ax, ang] = m_rotm2axang(Rs{k});
     axang = rotm2axang(Rs{k})';
     assert(ang == axang(4) && m_isequal(ax, axang(1:3)))
 end

@@ -1,4 +1,4 @@
-function [ang, ax] = m_rotm2axang(R)
+function [ax, ang] = m_rotm2axang(R)
 % m_rotm2axang converts a given SO3 rotation matrix to its equivalent 
 % axis-angle representation.
     ang = acos((trace(R)-1)/2);
