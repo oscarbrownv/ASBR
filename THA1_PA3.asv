@@ -28,7 +28,7 @@ p1 = T1(1:3, 4);
 h = -p1'*R1*ax/norm(ax)^2/ang;
 q = lsqminnorm((eye(3)-R1'), (-R1'*p1-h*ang*ax));
 
-T0 = [R1' (eye(3)-R1')*q + h*ang*ax; 0 0 0 1]*T1;
+T0 = [R];
 plotScrew(q, ax)
 plotTransforms(se3(T1), FrameSize=5, FrameAxisLabels="on")
 hold on
