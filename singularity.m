@@ -1,0 +1,3 @@
+function singularity()
+
+end
