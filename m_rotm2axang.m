@@ -9,7 +9,7 @@ function [ax, ang] = m_rotm2axang(R)
 %   ax: The rotation axis as a 3 by 1 column vector
 %   ang: The rotation angle
 
-ang = acos((trace(R)-1)/2);
+ang = real(acos((trace(R)-1)/2));
 
 if m_isequal(ang, 0)
     % Handle singular case where the rotation angle is zero

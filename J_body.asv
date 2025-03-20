@@ -1,10 +1,11 @@
-function J = J_space(S, a)
-% J_space.m calculates the spatial manipulator Jacobian.
+function J = J_body(S, a)
+% J_space.m calculates the body manipulator Jacobian.
 % The jacobian maps the joint velocities to the end-effector velocities
-% described in the space frame.
+% described in the body frame.
+% Assume g_st(0) = I, i.e. the initial configuration
 % 
 % Inputs:
-%   S: i-th column is the i-th screw axis described in space frame [wi; vi]
+%   S: i-th column is the i-th screw axis [wi; vi]
 %   a: i-th value is the angle corresponding to the i-th screw axis
 %
 % Outputs:
@@ -17,16 +18,12 @@ assert(size(S, 2) == length(a))
 N = length(a);
 
 % Initialization
-if isa(a, "sym")
-    J = sym("j", [6, N]);
-else
-    J = zeros(6, N);
-end
+J = zeros(6, N);
 A = eye(6);
 
-for ii = 1:N
+for ii = N:1
+    A = Ad_inv(exp_twist(S(:,ii), a(ii))) * A;
     J(:,ii) = A * S(:,ii);
-    A = A * Ad(exp_twist(S(:,ii), a(ii)));
 end
 
 end
