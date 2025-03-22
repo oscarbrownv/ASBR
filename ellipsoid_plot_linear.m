@@ -9,6 +9,7 @@ A = Jv * Jv';
 [V, D] = eig(A);
 [X, Y, Z] = ellipsoid(0, 0, 0, D(1,1), D(2,2), D(3,3));
 s = surf(X, Y, Z);
+
 % TODO: check if the axes are correct
 ang = rad2deg(m_rotm2zyz(V));
 rotate(s, [0 0 1], ang(1));

@@ -2,7 +2,6 @@ function J = J_body(S, a, M)
 % J_space.m calculates the body manipulator Jacobian.
 % The jacobian maps the joint velocities to the end-effector velocities
 % described in the body frame.
-% Assume g_st(0) = I!
 % 
 % Inputs:
 %   S: i-th column is the i-th screw axis described in space frame [wi; vi]

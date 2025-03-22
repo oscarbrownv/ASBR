@@ -1,4 +1,4 @@
-function T = FK_space(Ss, as, M, show_plot)
+function T = FK_space(Ss, as, M)
 % FK_space.m calculates the space form forward kinematics (FK).
 % Assume ||w|| == 1.
 % 
@@ -15,7 +15,6 @@ arguments
     Ss (6,:) double
     as (1,:) double
     M (4,4) double
-    show_plot (1,1) logical 
 end
 
 % Check that the dimension of screw axes is correct
@@ -30,35 +29,7 @@ for ii = N:-1:1
     T = exp_twist(Ss(:, ii), as(ii)) * T;
 end
 
-if show_plot
-    figure;
-    x = zeros(3, 1);
-    plotTransforms(x', [1 0 0 0]);
-    hold on
-    Adg = eye(6);
-    prev_x = x;
-    for ii = 1:N
-        S = Adg*Ss(:,ii);
-        if ~m_isequal(S(1:3), zeros(size(S(1:3))))
-           x = cal_q(S);
-        else
-           x = prev_x;
-        end
-        plotScrewAxis(x, S(1:3));
-        Adg = Adg * Ad(exp_twist(Ss(:, ii), as(ii)));
-        plotSegment(prev_x, x, "LineWidth", 2, "Color", "black");
-        prev_x = x;
-    end
-    plotSegment(prev_x, T(1:3,4), "LineWidth", 2, "Color", "black");
-    plotTransforms(T(1:3,4)', m_rotm2quat(T(1:3,1:3))')
-end
-
-end
-
-function q = cal_q(S)
-    w = S(1:3);
-    v = S(4:6);
-    a = cross(w, v);
-    proj_wa = dot(a,w)/norm(w)*w;
-    q = a - proj_wa;
+plotTransforms(M(1:3,4)', m_rotm2quat(M(1:3,1:3))', "FrameLabel", "T0")
+hold on
+plotTransforms(T(1:3,4)', m_rotm2quat(T(1:3,1:3))', "FrameLabel", "T1")
 end

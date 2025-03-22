@@ -13,7 +13,7 @@ as = [pi/2, pi/4];
 % Initial configuration; a straight line in x-direction
 M = [eye(3) [2; 0; 0]; zeros(1, 3), 1];
 
-T = FK_space(Ss, as, M, true);
+T = FK_space(Ss, as, M);
 title("RR Robot (Space form)")
 
 %% Planar RR Robot (Body form)
@@ -29,7 +29,7 @@ as = [pi/2, pi/4];
 % Initial configuration; a straight line in x-direction
 M = [eye(3) [2; 0; 0]; zeros(1, 3), 1];
 
-T = FK_body(Ss, as, M, true);
+T = FK_body(Ss, as, M);
 title("RR Robot (Body form)")
 
 %% RRRP Robot S(Space form)
@@ -49,7 +49,7 @@ as = [pi/2, pi/4, -pi/2, 1];
 % Initial configuration; a straight line in x-direction
 M = [eye(3) [3.5; 0; 0.5]; zeros(1, 3), 1]; 
 
-T = FK_space(Ss, as, M, true);
+T = FK_space(Ss, as, M);
 title("RRRP Robot (Space form)")
 
 %% RRRP Robot S(Body form)
@@ -69,5 +69,5 @@ as = [pi/2, pi/4, -pi/2, 1];
 % Initial configuration; a straight line in x-direction
 M = [eye(3) [3.5; 0; 0.5]; zeros(1, 3), 1];
 
-T = FK_body(Ss, as, M, true);
+T = FK_body(Ss, as, M);
 title("RRRP Robot (Body form)")

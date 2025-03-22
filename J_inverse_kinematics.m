@@ -1,6 +1,6 @@
 function theta = J_inverse_kinematics(S, Tsd, M, theta0)
 % J_inverse_kinematics.m calculates the joint configuration given the
-% desired end effector positiona and orientation.
+% desired end effector position and orientation.
 % 
 % Inputs:
 %   S: i-th column is the i-th screw axis [wi; vi]
