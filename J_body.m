@@ -18,7 +18,11 @@ assert(size(S, 2) == length(a))
 N = length(a);
 
 % Initialization
-J = zeros(6, N);
+if isa(a, "sym")
+    J = sym("j", [6, N]);
+else
+    J = zeros(6, N);
+end
 A = Ad_inv(M);
 
 for ii = N:-1:1
