@@ -24,7 +24,7 @@ traj = zeros(iter_max, n);
 traj(1, :) = theta0;
 while norm(s) > tol && cnt < iter_max
     J = J_body(S, theta, M);
-    if rank(J*J') < 6
+    if rank(J*J') < min(6,size(S,2))
         theta = theta + rand(n,1)*0.01;
     else
         theta = mod(theta + pinv(J)*s, 2*pi);
@@ -36,7 +36,7 @@ while norm(s) > tol && cnt < iter_max
 end
 traj = traj(1:cnt, :);
 if cnt >= iter_max
-    fprintf("Exit due to # of iterations exceed maximum allowable (%d).\n",iter_max)
+    fprintf("Exit due to # of iterations exceeds maximum allowable (%d).\n",iter_max)
 end
 end
 

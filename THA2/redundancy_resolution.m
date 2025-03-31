@@ -25,7 +25,7 @@ traj = zeros(iter_max, n);
 traj(1, :) = theta0;
 while norm(s) > tol && cnt < iter_max
     J = J_body(S, theta, M);
-    if rank(J*J') < 6
+    if rank(J*J') < min(6,size(S,2))
         theta = theta + rand(n,1)*0.01;
     else
         a = pinv(J)*s;

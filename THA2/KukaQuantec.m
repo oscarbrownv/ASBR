@@ -33,7 +33,7 @@ setFixedTransform(ee.Joint,tform);
 addBody(robot,ee,"link6");
 
 showdetails(robot);
-show(robot,"Frames","on");
+% show(robot,"Frames","on");
 
 %% Define screw axis
 q0 = homeConfiguration(robot);

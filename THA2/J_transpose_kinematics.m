@@ -1,4 +1,4 @@
-function q_final = J_transpose_kinematics(S, Tsd, M, q_init, options)
+function [q_final, traj] = J_transpose_kinematics(S, Tsd, M, q_init, options)
 disp(options);
 %if options are not given, set to these default settings for max iterations,
 %tolerance, and alpha value
@@ -21,6 +21,8 @@ end
 
 %starting joint configuration
 q = q_init;
+traj = zeros(options.max_iter, length(q_init));
+traj(1, :) = q_init;
 
 %for loop that iterates based on max_iter.
 for iter = 1:options.max_iter
@@ -35,17 +37,20 @@ for iter = 1:options.max_iter
     %tolerance, break from for loop.
     if err_norm < options.tol
         fprintf('Converged in %d iterations. Final norm: %f\n', iter, err_norm);
+        traj = traj(1:iter, :);
         break;
     end
     %compute Jacobian for delta_q equation
-    J = J_space(S, q);
+    J = J_body(S, q, M);
 
     %calculate the change in joint configurations
-    delta_q = options.alpha * (J' * err);
+    err(4:6) = err(4:6) * 3;
+    delta = J' * err;
+    alpha = (norm(delta) / norm(J*delta))^2;
 
     %add delta_q to q for joint configuration of next iteration
-    q = q + delta_q;
-
+    q = q + alpha*delta;
+    traj(iter+1,:) = q;
 end
 
 %save final joint configuration from for loop
