@@ -9,9 +9,7 @@ A = Jw * Jw';
 [V, D] = eig(A);
 [X, Y, Z] = ellipsoid(0, 0, 0, D(1,1), D(2,2), D(3,3));
 s = surf(X, Y, Z, "FaceColor", "none");
-xlim([-4 4])
-ylim([-4 4])
-zlim([-4 4])
+title("ellipsoid (angular)")
 
 % TODO: check if the axes are correct
 ang = rad2deg(m_rotm2zyz(V));

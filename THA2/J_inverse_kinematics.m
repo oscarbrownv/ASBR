@@ -26,6 +26,8 @@ while norm(s) > tol && cnt < iter_max
     J = J_body(S, theta, M);
     if rank(J*J') < min(6,size(S,2))
         theta = theta + rand(n,1)*0.01;
+        disp("Encounter singularity @")
+        disp(theta)
     else
         theta = mod(theta + pinv(J)*s, 2*pi);
     end

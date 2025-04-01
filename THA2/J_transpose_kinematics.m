@@ -44,12 +44,12 @@ for iter = 1:options.max_iter
     J = J_body(S, q, M);
 
     %calculate the change in joint configurations
-    err(4:6) = err(4:6) * 3;
+    err(4:6) = err(4:6) * 30;
     delta = J' * err;
     alpha = (norm(delta) / norm(J*delta))^2;
 
     %add delta_q to q for joint configuration of next iteration
-    q = q + alpha*delta;
+    q = mod(q + alpha*delta, 2*pi);
     traj(iter+1,:) = q;
 end
 
