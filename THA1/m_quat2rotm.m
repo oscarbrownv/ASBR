@@ -7,7 +7,7 @@ function R = m_quat2rotm(Q)
 % Outputs:
 %   R: an SO3 rotation matrix
 
-assert(norm(Q) == 1, "Must be unit quaternion")
+assert(m_isequal(norm(Q), 1), "Must be unit quaternion")
 
 ang = 2*acos(Q(1));
 if ang ~= 0
