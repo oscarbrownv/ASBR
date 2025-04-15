@@ -1,4 +1,4 @@
-testids = char(double('a'):double('g'));
+testids = char(double('h'):double('k'));
 max_diff = 0;
 
 % Iterate over every test cases
@@ -7,7 +7,7 @@ for jj = 1:length(testids)
     output_filename = sprintf("PA1-Results/pa1-%s-myoutput.txt", testid);
     
     % Read *-calbody.txt
-    filename = sprintf("pa1-debug-%s-calbody.txt", testid);
+    filename = sprintf("pa1-unknown-%s-calbody.txt", testid);
     file_path = fullfile("HW3-PA1", filename);
     lines = readlines(file_path);
     line = split(lines(1), ",");
@@ -32,7 +32,7 @@ for jj = 1:length(testids)
     end
     
     % Read *-empivot.txt
-    filename = sprintf("pa1-debug-%s-empivot.txt", testid);
+    filename = sprintf("pa1-unknown-%s-empivot.txt", testid);
     file_path = fullfile("HW3-PA1", filename);
     lines = readlines(file_path);
     line = split(lines(1), ",");
@@ -68,7 +68,7 @@ for jj = 1:length(testids)
     tG = A\B;
     
     % Read *-optpivot.txt
-    filename = sprintf("pa1-debug-%s-optpivot.txt", testid);
+    filename = sprintf("pa1-unknown-%s-optpivot.txt", testid);
     file_path = fullfile("HW3-PA1", filename);
     lines = readlines(file_path);
     line = split(lines(1), ",");
@@ -123,7 +123,7 @@ for jj = 1:length(testids)
     tH = A\B;
     
     % Read *-calreadings.txt
-    filename = sprintf("pa1-debug-%s-calreadings.txt", testid);
+    filename = sprintf("pa1-unknown-%s-calreadings.txt", testid);
     file_path = fullfile("HW3-PA1", filename);
     lines = readlines(file_path);
     line = split(lines(1), ",");
@@ -157,25 +157,5 @@ for jj = 1:length(testids)
         FA = [R p; zeros(1,3) 1];
         C_expected = FD\FA*[c; ones(1,NC)];
         writematrix(round(C_expected(1:3,:)',2),output_filename,"Delimiter",",","WriteMode","append")
-    end
-
-    % Check correctness and read
-    filename = sprintf("pa1-debug-%s-output1.txt", testid);
-    file_path = fullfile("HW3-PA1", filename);
-    lines_debug = readlines(file_path);
-    lines_mine = readlines(output_filename);
-    line_debug = split(lines_debug(1), ",");
-    line_mine = split(lines_mine(1), ",");
-    assert(str2double(line_debug(1)) == str2double(line_mine(1)));
-    assert(str2double(line_debug(2)) == str2double(line_mine(2)));
-    NC = str2double(line_debug(1));
-    Nf = str2double(line_debug(2));
-    tol = 1.1e-2;
-    curr = 1;
-    for frame = 1:Nf
-        curr = curr + 1;
-        data_debug = str2double(split(lines_debug(curr), ","));
-        data_mine = str2double(split(lines_mine(curr), ","));
-        max_diff = max(max_diff, norm(data_debug-data_mine)/norm(data_debug));
     end
 end
