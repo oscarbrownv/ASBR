@@ -22,6 +22,7 @@ function cost = objective(dq)
     twist = J*dq;
     alpha = twist(1:3);
     epsilon = twist(4:6);
+    cost = zeta*norm(skew(alpha)*t+epsilon+t-goal)^2+eta*norm(skew(alpha)*z)^2+norm(dq)^2;
     cost = zeta*norm(skew(alpha)*t+epsilon+t-goal)^2+eta*norm(skew(alpha)*z)^2;
 end
 function [c,ceq] = constraints(dq)
