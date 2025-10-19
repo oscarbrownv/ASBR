@@ -1,3 +1,7 @@
+% Automated grader for PA1 debug datasets (cases a-g).  The script replays
+% the calibration pipeline end-to-end and compares the generated output file
+% against the instructor-provided answer, capturing the worst-case relative
+% error along the way.
 testids = char(double('a'):double('g'));
 max_diff = 0;
 
@@ -7,6 +11,8 @@ for jj = 1:length(testids)
     output_filename = sprintf("PA1-Results/pa1-%s-myoutput.txt", testid);
     
     % Read *-calbody.txt
+    % Contains the fiducial marker coordinates for the EM base (D), optical
+    % markers on the calibration object (A), and the tracked probe (C).
     filename = sprintf("pa1-debug-%s-calbody.txt", testid);
     file_path = fullfile("HW3-PA1", filename);
     lines = readlines(file_path);
@@ -32,6 +38,8 @@ for jj = 1:length(testids)
     end
     
     % Read *-empivot.txt
+    % Run the pivot calibration to recover the EM probe tip expressed in the
+    % EM tracker frame.
     filename = sprintf("pa1-debug-%s-empivot.txt", testid);
     file_path = fullfile("HW3-PA1", filename);
     lines = readlines(file_path);
@@ -68,6 +76,8 @@ for jj = 1:length(testids)
     tG = A\B;
     
     % Read *-optpivot.txt
+    % Perform the optical tracker pivot calibration to locate the probe tip
+    % relative to the optical marker cluster.
     filename = sprintf("pa1-debug-%s-optpivot.txt", testid);
     file_path = fullfile("HW3-PA1", filename);
     lines = readlines(file_path);
@@ -123,6 +133,8 @@ for jj = 1:length(testids)
     tH = A\B;
     
     % Read *-calreadings.txt
+    % Evaluate the calibration solution against every frame and write the
+    % expected C marker locations to the homework output file.
     filename = sprintf("pa1-debug-%s-calreadings.txt", testid);
     file_path = fullfile("HW3-PA1", filename);
     lines = readlines(file_path);
@@ -132,6 +144,7 @@ for jj = 1:length(testids)
     NC = str2double(line(3));
     Nf = str2double(line(4));
     writelines(sprintf("%d,%d,%s",NC,Nf,output_filename),output_filename);
+    % Record the EM and optical pivot results before the per-frame data.
     writematrix(round(tG(4:6)',2),output_filename,"Delimiter",",","WriteMode","append");
     writematrix(round(tH(4:6)',2),output_filename,"Delimiter",",","WriteMode","append");
     curr = 1;
@@ -160,6 +173,8 @@ for jj = 1:length(testids)
     end
 
     % Check correctness and read
+    % Compare the generated file with the reference output.  The tolerance
+    % matches the course autograder (1.1e-2 relative Frobenius norm).
     filename = sprintf("pa1-debug-%s-output1.txt", testid);
     file_path = fullfile("HW3-PA1", filename);
     lines_debug = readlines(file_path);
