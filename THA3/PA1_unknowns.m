@@ -1,3 +1,6 @@
+% Validation harness for the hidden PA1 datasets (cases h-k).  The logic is
+% identical to `PA1_test.m` but points at the unknown files to verify the
+% pipeline before submitting to the autograder.
 testids = char(double('h'):double('k'));
 max_diff = 0;
 
@@ -7,6 +10,8 @@ for jj = 1:length(testids)
     output_filename = sprintf("PA1-Results/pa1-%s-myoutput.txt", testid);
     
     % Read *-calbody.txt
+    % Fiducial coordinates for the EM base (D), calibration object (A), and
+    % probe marker (C) used to seed each frame.
     filename = sprintf("pa1-unknown-%s-calbody.txt", testid);
     file_path = fullfile("HW3-PA1", filename);
     lines = readlines(file_path);
@@ -32,6 +37,7 @@ for jj = 1:length(testids)
     end
     
     % Read *-empivot.txt
+    % EM pivot calibration to recover the probe tip relative to the tracker.
     filename = sprintf("pa1-unknown-%s-empivot.txt", testid);
     file_path = fullfile("HW3-PA1", filename);
     lines = readlines(file_path);
@@ -68,6 +74,7 @@ for jj = 1:length(testids)
     tG = A\B;
     
     % Read *-optpivot.txt
+    % Optical pivot calibration to determine the probe tip in the camera frame.
     filename = sprintf("pa1-unknown-%s-optpivot.txt", testid);
     file_path = fullfile("HW3-PA1", filename);
     lines = readlines(file_path);
@@ -123,6 +130,8 @@ for jj = 1:length(testids)
     tH = A\B;
     
     % Read *-calreadings.txt
+    % Run the full calibration pipeline and store the predicted C markers for
+    % every frame in the format expected by the course grader.
     filename = sprintf("pa1-unknown-%s-calreadings.txt", testid);
     file_path = fullfile("HW3-PA1", filename);
     lines = readlines(file_path);
@@ -132,6 +141,7 @@ for jj = 1:length(testids)
     NC = str2double(line(3));
     Nf = str2double(line(4));
     writelines(sprintf("%d,%d,%s",NC,Nf,output_filename),output_filename);
+    % Emit the recovered EM/optical probe tips, then append each frame below.
     writematrix(round(tG(4:6)',2),output_filename,"Delimiter",",","WriteMode","append");
     writematrix(round(tH(4:6)',2),output_filename,"Delimiter",",","WriteMode","append");
     curr = 1;
