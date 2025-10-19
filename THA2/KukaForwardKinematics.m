@@ -1,7 +1,13 @@
 clear;
 clc;
-%User inputs the joint angles of each joint
-%error function catches angles out of range
+% Command-line driver for the product-of-exponentials formulation on the
+% KUKA Quantec arm.  This mirrors the homework write-up and walks through the
+% FK computation step-by-step, making it a nice reference when practicing the
+% manual calculations.
+%
+% User inputs the joint angles of each joint (in degrees) and the script
+% validates the ranges before converting to radians.
+% error function catches angles out of range
 theta1 = input('Axis 1 joint angle (between -180 and 180): ');
 if theta1 < -180 || theta1 >180
     error('Axis 1 angle out of range!')
@@ -47,7 +53,7 @@ w6 = [1;0;0];
 %Combining axes of rotation into one array
 w_all = [w1,w2,w3,w4,w5,w6];
 
-%Points along axes of rotation
+% Points along axes of rotation (values taken from the DH layout in mm)
 q1= [0;0;0];
 q2=[250;0;500];
 q3=[250;0;1270];
@@ -57,8 +63,8 @@ q6=[0;0;1200];
 %combining all points along axes of rotation into one array
 q_all = [q1,q2,q3,q4,q5,q6];
 
-%computes the screwaxes of each joint by iterating through each axis of
-%rotation and point along the axis
+% Compute the screw axes by combining each unit rotation axis with a point
+% lying on that axis.
 for i = 1:6
     wi = w_all(:,i);
     qi = q_all(:,i);
@@ -83,13 +89,13 @@ end
 %finally multiplies by the home matrix
 T = T * M;
 
-%displays calculated forward kinematics of end effector
+% Display the resulting transformation for review.
 disp('The forward kinematics transformation matrix T is:');
 disp(T);
 
 
 
-%local function to convert screw axes to se3 matrix
+% Local helper: convert a twist to an se(3) matrix so it can be exponentiated.
 function se3matrix = screw2se3(V)
     w = V(1:3);
     v = V(4:6);

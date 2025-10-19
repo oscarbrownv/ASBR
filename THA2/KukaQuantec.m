@@ -1,5 +1,11 @@
 clear; clc; close all;
 
+% KUKA Quantec regression test.
+% Builds the manipulator using the Robotics System Toolbox model and
+% cross-validates the screw-axis data used elsewhere in the homework.  This
+% script is a quick way to sanity-check FK and Jacobian changes against a
+% trusted implementation.
+
 % DH parameters; [a alpha d theta]
 % length: m; angle: radian
 dhparams = [0    0     .5   0;
@@ -49,6 +55,8 @@ end
 M = getTransform(robot,q0,"ee");
 
 %% Test cases
+% Probe a few joint configurations so that both FK and Jacobian comparisons
+% hit different parts of the workspace.
 q1 = ones(6,1);
 q2 = [1; 2; 0.5; -1; -2; -0.5];
 test(robot,q0,S,M,homepos)
@@ -56,12 +64,13 @@ test(robot,q1,S,M,homepos)
 test(robot,q2,S,M,homepos)
 
 function test(robot,q,S,M,homepos)
-    % FK
+    % FK: compare POE result against the rigidBodyTree forward kinematics.
     P = FK_space(S,q-homepos,M);
     Q = getTransform(robot,q,"ee");
     assert(m_isequal(P,Q));
 
-    % Jacobian
+    % Jacobian: randomize twists and check that the adjoint-adjusted spatial
+    % velocity matches the toolbox Jacobian mapping.
     rng(1);
     P = J_space(S,q-homepos);
     Q = geometricJacobian(robot,q,"ee");

@@ -1,4 +1,11 @@
-robot = robotics.RigidBodyTree('DataFormat', 'column'); % robot configuration as column vector 
+% THA2.m
+% Simple example that constructs a two-link manipulator using MATLAB's
+% robotics toolbox.  The goal is to illustrate how modified Denavit-Hartenberg
+% parameters and geometric Jacobians are specified programmatically.  This is
+% a lightweight script that can be run interactively while revising key
+% kinematics concepts.
+
+robot = robotics.RigidBodyTree('DataFormat', 'column'); % robot configuration as column vector
 
 % add first body (fixed, with an offset from ICS)
 body1 = robotics.RigidBody('body1');
@@ -13,4 +20,6 @@ body2.Joint = robotics.Joint('joint2', 'revolute');
 body2.Joint.setFixedTransform([0.3 -pi/3 0.1 0], 'mdh');
 robot.addBody(body2, 'body1');
 
+% Query the Jacobian at the zero configuration to reveal how joint motion
+% translates into spatial velocity of the end-effector.
 Jac = robot.geometricJacobian([0; 0], 'body2')

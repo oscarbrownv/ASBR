@@ -1,18 +1,22 @@
+% Compare the basic positional IK tweak against the orientation-aware
+% variant.  This script seeds the Quantec model, nudges the tool tip toward a
+% nearby goal, and then visualizes the two resulting end-effector paths.
 KukaQuantec;
 
+% Example starting configurations to try when experimenting with the solver.
 % q = [pi/2; -pi/3; 0; pi/4; 0; pi/3];
 q = [pi/2; -pi/3; pi/2; -pi; pi/4; 0];
 % q = zeros(6,1);
 F = FK_space(S,q,M);
 ub = deg2rad([180; 45; 150; 350; 125; 350]);
 lb = deg2rad([-180; -145; -130; -350; -125; -350]);
-tool = [0.1; 0; 0];
+tool = [0.1; 0; 0];           % tool-frame offset used in stay_near_point
 tol = 0.003;
 tool_w = F*[tool; 1];
 tool_w = tool_w(1:3);
 z = F*[0; 0; 1; 1];
 z = z(1:3)/norm(z(1:3));
-goal = tool_w + [-0.002; 0.001; 0.001];
+goal = tool_w + [-0.002; 0.001; 0.001];  % small Cartesian displacement
 dq1 = stay_near_point(S,tool_w,q,ub,lb,goal,tol);
 dq2 = stay_near_point_with_orientation_control(S,tool_w,z,q,ub,lb,goal,tol,0.5,0.5);
 
@@ -22,7 +26,7 @@ tool_w1 = F1*[tool; 1];
 z1 = F1*[0; 0; 1; 1];
 z1 = z1(1:3)/norm(z1(1:3));
 norm(tool_w1(1:3)-goal)
-asin(norm(cross(z,z1)))
+asin(norm(cross(z,z1)))  % angular deviation in radians
 % draw(tool_w,tool_w1,z,z1)
 
 q2 = q+dq2;
@@ -31,11 +35,13 @@ tool_w2 = F2*[tool; 1];
 z2 = F2*[0; 0; 1; 1];
 z2 = z2(1:3)/norm(z2(1:3));
 norm(tool_w2(1:3)-goal)
-asin(norm(cross(z,z2)))
+asin(norm(cross(z,z2)))  % angular deviation with orientation control
 draw(goal,tool_w,tool_w1,tool_w2,z,z1,z2)
 
 
 function draw(goal,p1,p2,p3,z1,z2,z3)
+% Plot the start pose, both end poses, and tool orientations for quick
+% comparison.  The tool axes are scaled down so the arrows stay readable.
     z1 = z1/1000;
     z2 = z2/1000;
     z3 = z3/1000;
@@ -63,3 +69,4 @@ function draw(goal,p1,p2,p3,z1,z2,z3)
     zlabel("z",'FontSize',24)
     legend('FontSize',24)
 end
+
